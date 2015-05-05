@@ -18,23 +18,30 @@ public class PasswordSolver {
 				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 		
 		String guess = "";
-		int index = 0;
-		int currentChar = 0;
+		int index = 0, saveIndex = 0, currentChar = 0;
 		while (!guess.equalsIgnoreCase(password)) {
+			
 			while (guess.length() < password.length()) {
 				guess += 'a';
 			}
 			
-			guess = guess.substring(0, index) + validChars[currentChar] + guess.substring(index + 1);
+			guess = guess.substring(0, index + 1) + validChars[currentChar] + guess.substring(index + 2);
 			currentChar++;
 			
-			if (currentChar == 62) {
-				currentChar = 0;
-				index++;
-			}
-			
 			System.out.println(guess);
+			
+			if (currentChar == 61) {
+				currentChar = 0;
+				if (index < guess.length() - 2) {
+					index++;
+				} else {
+					if (saveIndex < 61) saveIndex++;
+					guess = validChars[saveIndex] + guess.substring(guess.length() - 1);
+				}
+			}
 		}
+		
+		System.out.printf("The password is '%s'.", guess);
 		
 		sc.close();
 	}
