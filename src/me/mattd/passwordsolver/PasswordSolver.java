@@ -82,10 +82,6 @@ public class PasswordSolver {
 					guess = validChars[firstCharIndex] + guess.substring(1, index) + validChars[currentChar] + guess.substring(guess.length() - index);
 					index--;
 					
-					
-					
-					
-					
 					System.out.println("GUESS: " + guess);
 					
 				}
