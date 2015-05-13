@@ -19,7 +19,6 @@ public class PasswordSolver {
 		
 		// 62 valid characters to test
 		
-		
 		String guess = "";
 		int index = 0, firstCharIndex = 0, currentChar = 0, startIndex = 1;
 		
@@ -42,9 +41,6 @@ public class PasswordSolver {
 			 * after the character being edited.
 			 */
 			if (currentChar == 62) {
-				
-				System.out.println("CURRENT CHAR: " + currentChar);
-				
 				currentChar = 0;
 				
 				/* If the character being edited is the last character,
@@ -53,40 +49,36 @@ public class PasswordSolver {
 				 * validChars Array, and the rest of the existing guess
 				 * String.
 				*/
-				if (isLastCharacter(guess, index)) {
-					
-					System.out.println("LAST CHARACTER");
-					
-					/*int twoChar = 0;
-					int threeChar = 61;
-					
-					while (twoChar < 61 && threeChar > 0) {
-						guess = guess.substring(0, 1) + validChars[twoChar++] + validChars[threeChar--];
-						System.out.println(guess);
-					}*/
-					
-					
-					// If the first character is not a 9 (#61)
-					if (firstCharIndex < 61) {
-						guess = validChars[firstCharIndex] + guess.substring(1); // Change the first character to the next character
-					} else {
-						break;
+				if (firstCharIndex >= 61) break;
+				if (guess.charAt(startIndex) == '9') {
+					firstCharIndex++;
+					guess = validChars[firstCharIndex] + ""; 
+					while (guess.length() < password.length() - 1) {
+						guess += 'a';
 					}
-					index = startIndex;
-				} else {
-					
-					
-					System.out.println("INDEX: " + index);
-					System.out.println("Current char: " + currentChar);
-					
-					guess = validChars[firstCharIndex] + guess.substring(1, index) + validChars[currentChar] + guess.substring(guess.length() - index);
-					index--;
-					
-					System.out.println("GUESS: " + guess);
-					
 				}
-			} else {
+				if (guess.charAt(index - 1) == '9')  index--;
 				
+				//guess = guess.substring(0, index) + validChars[getCharIndex(guess.charAt(index)) + 1] + guess.substring(index + 1);
+				
+				if (isLastCharacter(guess, index)) {
+					guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar];
+				} else {
+					if (getCharIndex(guess.charAt(index - 1)) == '9') {
+						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[0] + validChars[currentChar] + guess.substring(index + 1);
+					} else {
+						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar] + guess.substring(index);
+					}
+				}
+				
+				
+				/*if (index <= guess.length() - 3) {
+					while (index + 1 <= guess.length() - 1) {
+						
+					}
+				}*/
+				
+			} else {
 				if (isLastCharacter(guess, index)) {
 					guess = guess.substring(0, index) + validChars[currentChar];
 				} else {
@@ -155,6 +147,16 @@ public class PasswordSolver {
 	 * baa
 	 * bab
 	 * bac
+	 * 
+	 * 
+	 * Get string length set all to a
+	 * 
+	 *
+	 *--
+	 * Cycle last character a-9
+	 * Change startIndex character to next character (a > b)
+	 * Repeat until startIndex character = 9
+	 * 
 	 * 
 	 */
 }
