@@ -49,6 +49,7 @@ public class PasswordSolver {
 				 * validChars Array, and the rest of the existing guess
 				 * String.
 				*/
+				
 				if (firstCharIndex >= 61) break;
 				if (guess.charAt(startIndex) == '9') {
 					firstCharIndex++;
@@ -57,32 +58,22 @@ public class PasswordSolver {
 						guess += 'a';
 					}
 				}
-				if (guess.charAt(index - 1) == '9')  index--;
-				
-				//guess = guess.substring(0, index) + validChars[getCharIndex(guess.charAt(index)) + 1] + guess.substring(index + 1);
+				if (guess.charAt(index - 1) == '9') index--;
 				
 				if (isLastCharacter(guess, index)) {
 					guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar];
 				} else {
-					if (getCharIndex(guess.charAt(index - 1)) == '9') {
-						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[0] + validChars[currentChar] + guess.substring(index + 1);
+					if (getCharIndex(guess.charAt(index - 1)) == 61) {
+						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[0] + validChars[currentChar] + guess.substring(index + 2);
 					} else {
 						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar] + guess.substring(index);
 					}
-				}
-				
-				
-				/*if (index <= guess.length() - 3) {
-					while (index + 1 <= guess.length() - 1) {
-						
-					}
-				}*/
-				
+				}				
 			} else {
 				if (isLastCharacter(guess, index)) {
 					guess = guess.substring(0, index) + validChars[currentChar];
 				} else {
-					guess = guess.substring(0, index) + validChars[currentChar] + guess.substring(index + 1);
+					guess = guess.substring(0, index) + validChars[currentChar] + guess.substring(index + 2);
 				}
 				currentChar++;
 			}
@@ -109,54 +100,10 @@ public class PasswordSolver {
 	}
 	
 	/*
-	 * aa
-	 * ab
-	 * ac
-	 * ad
-	 * ae
-	 * af
-	 * ag
-	 * ah
-	 * ai
-	 * ...
-	 * ba
-	 * bb
-	 * bc
-	 * bd
-	 * be
-	 * ...
-	 * za
-	 * zb
-	 * ....
-	 * 9a
-	 * 9a
-	 * ...
-	 * 
-	 * 
-	 * aaa
-	 * aab
-	 * aac
-	 * aad
-	 * aae
-	 * aaf
-	 * ....
-	 * aba
-	 * abb
-	 * ....
-	 * a99
-	 * baa
-	 * bab
-	 * bac
-	 * 
-	 * 
 	 * Get string length set all to a
-	 * 
-	 *
 	 *--
 	 * Cycle last character a-9
 	 * Change startIndex character to next character (a > b)
 	 * Repeat until startIndex character = 9
-	 * 
-	 * 
 	 */
 }
