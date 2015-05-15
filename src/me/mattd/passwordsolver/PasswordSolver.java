@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class PasswordSolver {
 	
+	// 62 valid characters to test
 	static char[] validChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
@@ -12,12 +13,8 @@ public class PasswordSolver {
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		//sc.useDelimiter("^[A-Za-z0-9_.]+$");
-		
 		System.out.print("Enter a password: ");
 		String password = sc.next();
-		
-		// 62 valid characters to test
 		
 		String guess = "";
 		int index = 0, firstCharIndex = 0, currentChar = 0, startIndex = 1;
@@ -46,10 +43,8 @@ public class PasswordSolver {
 				/* If the character being edited is the last character,
 				 * else add one to the character index, and set the guess
 				 * equal to the +1 the index of the first character in the
-				 * validChars Array, and the rest of the existing guess
-				 * String.
+				 * validChars Array, and the rest of the existing guess String.
 				*/
-				
 				if (firstCharIndex >= 61) break;
 				if (guess.charAt(startIndex) == '9') {
 					firstCharIndex++;
@@ -68,7 +63,7 @@ public class PasswordSolver {
 					} else {
 						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar] + guess.substring(index);
 					}
-				}				
+				}
 			} else {
 				if (isLastCharacter(guess, index)) {
 					guess = guess.substring(0, index) + validChars[currentChar];
