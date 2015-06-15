@@ -15,83 +15,136 @@ public class PasswordSolver {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter a password: ");
 		String password = sc.next();
-		
-		String guess = "";
-		int index = 0, firstCharIndex = 0, currentChar = 0, startIndex = 1;
+		System.out.printf("The password is '%s'.", solvePassword(password));
+		sc.close();
+	}
+	
+	static String solvePassword(String password) {
+		String guess = "a";
+		int index = 0, length, start;
+		boolean addNewChar = true;
+		boolean changeFirstChar = true;
 		
 		// While the password does not match
-		while (!guess.equalsIgnoreCase(password)) {
+		while (!guess.equals(password)) {
 			
-			// Add characters to match the password length
-			while (guess.length() < password.length()) {
-				guess += 'a';
-				startIndex = password.length() - (password.length() - 1);
-				index = guess.length() - 1;
-			}
-			
-			/* If the current paste character is 9 (#61),
-			 * else add one to the current character index
-			 * in validChars Array. If the index of the guess character that is
-			 * currently being edited is equal to the length is less and the length
-			 * of the guess String - 1, set guess equal to the first character to the index character,
-			 * the current character in the validChars Array, and the rest of the word from the letter
-			 * after the character being edited.
-			 */
-			if (currentChar == 62) {
-				currentChar = 0;
+			if (guess.charAt(index) == '9') {
 				
-				/* If the character being edited is the last character,
-				 * else add one to the character index, and set the guess
-				 * equal to the +1 the index of the first character in the
-				 * validChars Array, and the rest of the existing guess String.
-				*/
-				if (firstCharIndex >= 61) break;
-				if (guess.charAt(startIndex) == '9') {
-					firstCharIndex++;
-					guess = validChars[firstCharIndex] + ""; 
-					while (guess.length() < password.length() - 1) {
-						guess += 'a';
-					}
-				}
-				if (guess.charAt(index - 1) == '9') index--;
-				
-				if (isLastCharacter(guess, index)) {
-					guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar];
-				} else {
-					if (getCharIndex(guess.charAt(index - 1)) == 61) {
-						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[0] + validChars[currentChar] + guess.substring(index + 2);
+				if (index == 0) {
+					
+					if (getCharIndex(guess.charAt(0)) == 61) {
+						guess = "a" + guess.substring(1) + "a";
 					} else {
-						guess = validChars[firstCharIndex] + guess.substring(1, index - 1) + validChars[getCharIndex(guess.charAt(index - 1)) + 1] + validChars[currentChar] + guess.substring(index);
+						guess = getNextChar(guess.charAt(0)) + guess.substring(1) + "a";
+					}
+					
+				} else {
+					
+					length = guess.length();
+					addNewChar = true;
+					
+					for (int i = 0; i < length; i++) {
+						if (guess.charAt(i) != '9') {
+							addNewChar = false;
+						}
+					}
+
+					if (addNewChar) {
+						guess = "a";
+						for (int i = 0; i < length; i++) {
+							guess += "a";
+						}
+						addNewChar = false;
+
+					} else {
+						if (guess.length() > 2) {
+							changeFirstChar = true;
+							for (int i = 1; i < length; i++) {
+								if (guess.charAt(i) != '9') {
+									changeFirstChar = false;
+								}
+							}
+							
+							if (changeFirstChar) {
+								System.out.println("CHANGING");
+								
+								guess = getNextChar(guess.charAt(0)) + resetCharacters(guess);
+							}
+						}
+						
+						if (guess.charAt(index - 1) == '9') {
+							guess = guess.substring(0, index - 1) + "9" + validChars[0];
+						} else {
+							guess = guess.substring(0, index - 1) + getNextChar(guess.charAt(index - 1)) + validChars[0];
+						}
+					}
+					
+				}
+				
+				if (guess.length() < 4) {
+					index = guess.length() - 1;
+				} else {
+					boolean changeChar = true;
+					
+					length = guess.length();
+					for (int i = 1; i < length; i++) {
+						if (guess.charAt(i) != '9') {
+							changeChar = false;
+						}
+					}
+					
+					if (changeChar) {
+						index = guess.length() - 2;
 					}
 				}
+				
 			} else {
+				
+				//System.out.println("RIGHT BEFORE: " + guess);
+				
 				if (isLastCharacter(guess, index)) {
-					guess = guess.substring(0, index) + validChars[currentChar];
+					
+					//System.out.println("LAST CHAR");
+					
+					guess = guess.substring(0, index) + getNextChar(guess.charAt(index));
 				} else {
-					guess = guess.substring(0, index) + validChars[currentChar] + guess.substring(index + 2);
+					guess = guess.substring(0, index) + getNextChar(guess.charAt(index)) + guess.substring(index + 1);
 				}
-				currentChar++;
+				
+				//System.out.println("LAST GUESS: " + guess);
+				
 			}
 
 			System.out.println(guess);
 		}
 		
-		System.out.printf("The password is '%s'.", guess);
-		sc.close();
+		return guess;
 	}
 	
-	public static boolean isLastCharacter(String s, int i) {
+	static boolean isLastCharacter(String s, int i) {
 		if (i == s.length() - 1) return true;
 		return false;
 	}
 	
-	public static int getCharIndex(char c) {
+	static int getCharIndex(char c) {
 		for (int i = 0; i < 62; i++) {
 			if (c == validChars[i]) {
 				return i;
 			}
 		}
 		return -1;
+	}
+	
+	static char getNextChar(char c) {
+		return validChars[getCharIndex(c) + 1];
+	}
+	
+	static String resetCharacters(String s) {
+		int length = s.length();
+		for (int i = 0; i < length; i++) {
+			s += "a";
+		}
+		return s;
 	}
 	
 	/*
