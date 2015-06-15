@@ -75,8 +75,12 @@ public class PasswordSolver {
 							
 							if (index > 1) {
 								index--;
-								guess = guess.substring(0, index - 1) + getNextChar(guess.charAt(index - 1)) + resetCharacters(guess.substring(index).length());
 								
+								if (guess.charAt(index - 1) == '9') {
+									guess = guess.substring(0, index - 1) + "9" + resetCharacters(guess.substring(index).length());
+								} else {
+									guess = guess.substring(0, index - 1) + getNextChar(guess.charAt(index - 1)) + resetCharacters(guess.substring(index).length());
+								}
 							}
 							index = guess.length() - 1;
 							
@@ -84,7 +88,6 @@ public class PasswordSolver {
 							guess = guess.substring(0, index - 1) + getNextChar(guess.charAt(index - 1)) + validChars[0];
 						}
 					}
-					
 				}
 				
 				if (guess.length() < 4) {
@@ -150,20 +153,4 @@ public class PasswordSolver {
 		}
 		return s;
 	}
-	
-	/*
-	 * Get string length set all to a
-	 *--
-	 * Cycle last character a-9
-	 * Change startIndex character to next character (a > b)
-	 * Repeat until startIndex character = 9
-	 * 
-	 * 
-	 * Current status
-	 * 
-	 * 999
-	 * aaaa
-	 * aaba
-	 * 
-	 */
 }
