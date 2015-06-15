@@ -21,7 +21,7 @@ public class PasswordSolver {
 	
 	static String solvePassword(String password) {
 		String guess = "a";
-		int index = 0, length, start;
+		int index = 0, length;
 		boolean addNewChar = true;
 		boolean changeFirstChar = true;
 		
@@ -54,6 +54,7 @@ public class PasswordSolver {
 						for (int i = 0; i < length; i++) {
 							guess += "a";
 						}
+						index = guess.length() - 1;
 						addNewChar = false;
 
 					} else {
@@ -66,14 +67,19 @@ public class PasswordSolver {
 							}
 							
 							if (changeFirstChar) {
-								System.out.println("CHANGING");
-								
-								guess = getNextChar(guess.charAt(0)) + resetCharacters(guess);
+								guess = getNextChar(guess.charAt(0)) + resetCharacters(guess.length());
 							}
 						}
 						
 						if (guess.charAt(index - 1) == '9') {
-							guess = guess.substring(0, index - 1) + "9" + validChars[0];
+							
+							if (index > 1) {
+								index--;
+								guess = guess.substring(0, index - 1) + getNextChar(guess.charAt(index - 1)) + resetCharacters(guess.substring(index).length());
+								
+							}
+							index = guess.length() - 1;
+							
 						} else {
 							guess = guess.substring(0, index - 1) + getNextChar(guess.charAt(index - 1)) + validChars[0];
 						}
@@ -97,22 +103,12 @@ public class PasswordSolver {
 						index = guess.length() - 2;
 					}
 				}
-				
 			} else {
-				
-				//System.out.println("RIGHT BEFORE: " + guess);
-				
 				if (isLastCharacter(guess, index)) {
-					
-					//System.out.println("LAST CHAR");
-					
 					guess = guess.substring(0, index) + getNextChar(guess.charAt(index));
 				} else {
 					guess = guess.substring(0, index) + getNextChar(guess.charAt(index)) + guess.substring(index + 1);
 				}
-				
-				//System.out.println("LAST GUESS: " + guess);
-				
 			}
 
 			System.out.println(guess);
@@ -147,11 +143,27 @@ public class PasswordSolver {
 		return s;
 	}
 	
+	static String resetCharacters(int length) {
+		String s = "";
+		for (int i = 0; i < length; i++) {
+			s += "a";
+		}
+		return s;
+	}
+	
 	/*
 	 * Get string length set all to a
 	 *--
 	 * Cycle last character a-9
 	 * Change startIndex character to next character (a > b)
 	 * Repeat until startIndex character = 9
+	 * 
+	 * 
+	 * Current status
+	 * 
+	 * 999
+	 * aaaa
+	 * aaba
+	 * 
 	 */
 }
